@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Admin\Coupon;
 use App\Models\Common\File;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -61,6 +62,11 @@ class User extends Authenticatable
 
     public function orders(){
         return $this->hasMany(orders::class);
+    }
+
+    public function uniqueVoucher()
+    {
+        return $this->hasOne(Coupon::class)->where('id', 1);
     }
 
 }

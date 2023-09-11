@@ -60,4 +60,42 @@ class Category extends Model
     public function showHome() {
         return DB::table('categories')->select('name','id','slug')->where('status','=','1')->get();
     }
+
+    public static function getAllForEdit($id)
+    {
+        DB::enableQueryLog();
+        $all = self::where('id', '<>', $id)
+            ->where('parent_id', '<>', $id)
+            ->select(['id', 'name', 'sort_order', 'level', 'status'])
+            ->orderBy('sort_order', 'asc')
+            ->get()->toArray();
+
+        // $all = DB::getQueryLog();
+        // dd($all);
+        $result = [];
+        $result = array_map(function ($value) {
+            if ($value['level'] == 1) {
+                $value['name'] = ' |-- ' . $value['name'];
+            }
+            if ($value['level'] == 2) {
+                $value['name'] = ' |-- |-- ' . $value['name'];
+            }
+            if ($value['level'] == 3) {
+                $value['name'] = ' |-- |-- |-- ' . $value['name'];
+            }
+            if ($value['level'] == 4) {
+                $value['name'] = ' |-- |-- |-- | --' . $value['name'];
+            }
+            return $value;
+        }, $all);
+        // dd($result);
+        return $result;
+    }
+
+
+    public function updataCategory($id, $data)
+    {
+        $data[] = $id;
+        return DB::update('UPDATE categories SET name=?, sort_order = ?, parent_id =?, level =? , status = ? ,updated_at=? WHERE id = ?', $data);
+    }
 }

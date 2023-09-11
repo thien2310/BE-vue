@@ -29,7 +29,8 @@ class usersController extends Controller
 
     public function index()
     {
-        $users = User::join('departments', 'users.department_id', '=', 'departments.id')
+        $users = DB::table('users')
+            ->join('departments', 'users.department_id', '=', 'departments.id')
             ->join('users_status', 'users.status_id', '=', 'users_status.id')
             ->select('users.*', 'departments.name as departments', 'users_status.name as status')
             ->get();
@@ -97,7 +98,7 @@ class usersController extends Controller
             $this->user->save();
 
             if ($request->imageUrl) {
-                FileHelpers::uploadFile($request->imageUrl, "User", $this->user->id, User::class, "Avatar",2);
+                FileHelpers::uploadFile($request->imageUrl, "User", $this->user->id, User::class, "Avatar", 2);
             }
 
             DB::commit();
@@ -241,5 +242,16 @@ class usersController extends Controller
     public function user()
     {
         return Auth::user();
+    }
+
+
+    public function search($key)
+    {
+
+        $result = $this->user->where('name', 'like', "$key%")->get();
+
+        return response([
+            'result' => $result,
+        ]);
     }
 }

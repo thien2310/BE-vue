@@ -9,6 +9,7 @@ use Intervention\Image\Facades\Image;
 use File as FileSystem;
 
 
+
 class FileHelpers
 {
 
@@ -30,9 +31,6 @@ class FileHelpers
     //     }
 
     // }
-
-
-
 
     public static function uploadFile($file, $folder, $id = null, $class = null, $custom = null, $type = null)
     {
@@ -205,6 +203,7 @@ class FileHelpers
         if (!is_array($fileIds)) {
             $fileIds = [$fileIds];
         }
+
         $file = File::query()
             ->where('model_id', $id)
             ->where('model_type', $class)
@@ -216,5 +215,42 @@ class FileHelpers
         }
 
         $file->delete();
+    }
+
+    public static function updateMutilFile($fileList, $id, $class, $custom = null)
+    {
+
+        // foreach ($fileList as $key) {
+        //     if (isset($key['url'])) {
+        //         $url[] =  $key['url'];
+        //     }
+        //     if (isset($key['id'])) {
+        //         $ids[] = $key['id'];
+        //     }
+
+        //     if (isset($key['thumbUrl'])) {
+        //         $thumurl[] = $key['thumbUrl'];
+        //     }
+        // }
+        // foreach ($this->product->find($id)->images as $val) {
+        //     $allids[] = $val['id'];
+        // }
+
+        // $idsDelete = array_diff($allids, $ids);
+        // $file = File::query()->where([
+        //     'model_id' => $this->product->find($id)->id,
+        //     'model_type' => get_class($this->product),
+        // ])->whereIn('id', $idsDelete);
+
+
+        // foreach($file->get() as $val) {
+        //     if (file_exists(public_path($val->path))) {
+        //         unlink(public_path($val->path));
+        //     }
+        // }
+        // $file->delete();
+
+
+
     }
 }
